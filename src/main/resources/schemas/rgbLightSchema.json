@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {},
+  "id": "fireplace-schema",
+  "allOf": [
+    {
+      "$ref": "baseDeviceSchema.json"
+    },
+    {
+      "properties": {
+        "red": {
+          "default": 0,
+          "description": "the intensity of red color (0-255)",
+          "id": "/properties/status",
+          "title": "Red color",
+          "type": "integer"
+        },
+        "green": {
+          "default": 0,
+          "description": "the intensity of green color (0-255)",
+          "id": "/properties/status",
+          "title": "The status schema",
+          "type": "string"
+        },
+        "blue": {
+          "default": 0,
+          "description": "the intensity of blue color (0-255)",
+          "id": "/properties/status",
+          "title": "The status schema",
+          "type": "string"
+        }
+      },
+      "required": [
+        "label",
+        "deviceType"
+      ]
+    }
+  ],
+  "type": "object"
+}

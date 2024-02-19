@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {},
+  "id": "fireplace-schema",
+  "allOf": [
+    {
+      "$ref": "baseDeviceSchema.json"
+    },
+    {
+      "properties": {
+        "unit": {
+          "default": "C",
+          "description": "The measuring unit of thermometer",
+          "id": "/properties/unit",
+          "title": "unit",
+          "type": "string"
+        },
+        "temperature": {
+          "default": 0.0,
+          "description": "temperature red by sensor",
+          "id": "/properties/status",
+          "title": "The temperature schema",
+          "type": "number"
+        }
+      },
+      "required": [
+        "label",
+        "deviceType"
+      ]
+    }
+  ],
+  "type": "object"
+}

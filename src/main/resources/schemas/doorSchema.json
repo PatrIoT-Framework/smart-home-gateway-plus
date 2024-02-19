@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {},
+  "id": "fireplace-schema",
+  "allOf": [
+    {
+      "$ref": "baseDeviceSchema.json"
+    },
+    {
+      "properties": {
+        "status": {
+          "default": "closed",
+          "description": "the status of the door (closed,opened)",
+          "id": "/properties/status",
+          "title": "The status schema",
+          "type": "string"
+        }
+      },
+      "required": [
+        "label",
+        "deviceType"
+      ]
+    }
+  ],
+  "type": "object"
+}
