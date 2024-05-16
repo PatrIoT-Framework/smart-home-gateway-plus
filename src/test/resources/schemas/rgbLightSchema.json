@@ -2,60 +2,67 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "definitions": {},
   "id": "fireplace-schema",
-
-
-      "properties": {
-        "label": {
-          "default": null,
-          "description": "the name of the house",
-          "id": "/properties/label",
-          "title": "The label schema",
-          "type": "string"
-        },
-        "deviceType": {
-          "default": "device",
-          "description": "Type of the device",
-          "id": "/properties/deviceType",
-          "title": "The deviceType schema",
-          "type": "string"
-        },
-        "enabled": {
-          "default":false,
-          "description": "Indicates whether the device is currently enabled and operational.",
-          "id": "/properties/enabled",
-          "title": "The enabled schema",
-          "type": "boolean"
-        },
-        "red": {
-          "default": 0,
-          "description": "the intensity of red color (0-255)",
-          "id": "/properties/red",
-          "title": "Red color",
-          "type": "integer"
-        },
-        "green": {
-          "default": 0,
-          "description": "the intensity of green color (0-255)",
-          "id": "/properties/green",
-          "title": "Green color",
-          "type": "integer"
-        },
-        "blue": {
-          "default": 0,
-          "description": "the intensity of blue color (0-255)",
-          "id": "/properties/blue",
-          "title": "Blue color",
-          "type": "integer"
-        }
+  "properties": {
+    "label": {
+      "default": null,
+      "description": "the name of the house",
+      "id": "/properties/label",
+      "title": "The label schema",
+      "type": "string"
     },
+    "deviceType": {
+      "default": "RGBLight",
+      "description": "Type of the device",
+      "id": "/properties/deviceType",
+      "title": "The deviceType schema",
+      "type": "string"
+    },
+    "enabled": {
+      "default": false,
+      "description": "Indicates whether the device is currently enabled and operational.",
+      "id": "/properties/enabled",
+      "title": "The enabled schema",
+      "type": "boolean"
+    },
+    "switchedOn": {
+      "default": false,
+      "description": "Indicates whether the device is currently switched on.",
+      "id": "/properties/switchedOn",
+      "title": "The switchedOn schema",
+      "type": "boolean"
+    },
+    "red": {
+      "default": 0,
+      "minimum": 0,
+      "maximum": 255,
+      "description": "the intensity of red color (0-255)",
+      "id": "/properties/red",
+      "title": "Red color",
+      "type": "integer"
+    },
+    "green": {
+      "default": 0,
+      "minimum": 0,
+      "maximum": 255,
+      "description": "the intensity of green color (0-255)",
+      "id": "/properties/green",
+      "title": "Green color",
+      "type": "integer"
+    },
+    "blue": {
+      "default": 0,
+      "minimum": 0,
+      "maximum": 255,
+      "description": "the intensity of blue color (0-255)",
+      "id": "/properties/blue",
+      "title": "Blue color",
+      "type": "integer"
+    }
+  },
   "required": [
     "label",
-    "deviceType",
-    "enabled",
-    "red",
-    "green",
-    "blue"
-    ],
+    "deviceType"
+  ],
   "type": "object",
   "additionalProperties": false
 }

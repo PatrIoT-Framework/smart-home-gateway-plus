@@ -26,11 +26,9 @@ import java.util.Map;
 public class HouseRoutes extends RouteBuilder {
 
 
-    /**
-     * @throws Exception
-     */
+
     @Override
-    public void configure() throws Exception {
+    public void configure(){
         onException(FindException.class)
                 .handled(true)
                 .log(LoggingLevel.ERROR, "Error: ${exception.message}")
@@ -55,7 +53,7 @@ public class HouseRoutes extends RouteBuilder {
                 .to("direct:invalidHouseAddress")
                 .end();
 
-        /**
+        /*
          * Get house by id from endpoint disabled
          */
         from("direct:getHouseFromEndpoint").disabled()
@@ -69,12 +67,10 @@ public class HouseRoutes extends RouteBuilder {
                 .to("direct:validate");
 
 
-        /**
+        /*
          * Add house
-         * preusporiadat validate a check status (prve toD)
          */
         from("direct:addHouse")
-                //.to("json-validator:houseschema.json")
                 .setProperty("house", simple("${body}"))
                 .setHeader("HouseAddress", simple("${body[address]}").convertToString())
 
@@ -84,7 +80,7 @@ public class HouseRoutes extends RouteBuilder {
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .setHeader(Exchange.AGGREGATED_TIMEOUT, constant(200))
                 .log("before netty")
-                .toD("netty-http:${header.HouseAddress}/status?connectTimeout=500&requestTimeout=500&throwExceptionOnFailure=false")
+                .toD("netty-http:${header.HouseAddress}/api/v0.1/house/status?connectTimeout=500&requestTimeout=500&throwExceptionOnFailure=false")
                 .log("after netty")
                 .log("House: ${body}")
                 .choice()
@@ -98,7 +94,7 @@ public class HouseRoutes extends RouteBuilder {
                 .throwException(new ConnectException("House is not reachable"))
                 .end();
 
-        /**
+        /*
          * Get house by id
          */
         from("direct:getHouseById")
@@ -108,7 +104,7 @@ public class HouseRoutes extends RouteBuilder {
                 .end();
 
 
-        /**
+        /*
          * Update house
          */
         from("direct:updateHouse")
@@ -116,9 +112,9 @@ public class HouseRoutes extends RouteBuilder {
                 .to("json-validator:houseschema.json")
                 .log(LoggingLevel.INFO, "PUT /api/house ${body}")
                 .unmarshal(new JacksonDataFormat(HouseDTO.class))
-                .to("bean:HouseService?method=updateHouse(${body},{header.house})");
+                .to("bean:HouseService?method=updateHouse(${body},${header.house})");
 
-        /**
+        /*
          * Delete house
          */
         from("direct:deleteHouse")
@@ -126,7 +122,7 @@ public class HouseRoutes extends RouteBuilder {
                 .to("bean:HouseService?method=deleteHouse(${header.house})")
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(204));
 
-        /**
+        /*
          * Get all houses
          */
         from("direct:getHouses")
@@ -168,7 +164,9 @@ public class HouseRoutes extends RouteBuilder {
                     exchange.getIn().setBody(errorDetails);
                 })
                 .end();
-
+        /*
+         * Handle IllegalArgumentException
+         */
         from("direct:handleIllegalArgumentException")
                 .log(LoggingLevel.ERROR, "Error: ${exception.message}")
                 .log("handleILLegalArgumentException")
@@ -187,7 +185,9 @@ public class HouseRoutes extends RouteBuilder {
                     exchange.getIn().setBody(errorDetails);
                 })
                 .end();
-
+        /*
+         * Handle invalid house address
+         */
         from("direct:invalidHouseAddress")
                 .log(LoggingLevel.ERROR, "Error: ${exception.message}")
                 .log("invalidHouseAddress")

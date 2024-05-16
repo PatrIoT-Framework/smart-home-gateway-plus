@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "definitions": {},
-  "id": "fireplace-schema",
+  "id": "door-schema",
 
       "properties": {
 
@@ -28,6 +28,7 @@
         },
         "status": {
           "default": "closed",
+          "enum": ["closed", "opened"],
           "description": "the status of the door (closed,opened)",
           "id": "/properties/status",
           "title": "The status schema",
@@ -36,9 +37,7 @@
       },
       "required": [
         "label",
-        "deviceType",
-        "enabled",
-        "status"
+        "deviceType"
       ],
   "additionalProperties": false,
   "type": "object"

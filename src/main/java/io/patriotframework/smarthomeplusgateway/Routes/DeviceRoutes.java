@@ -13,11 +13,9 @@ import org.springframework.http.MediaType;
  * This class is responsible for creating the routes for the devices.
  */
 public class DeviceRoutes extends RouteBuilder {
-    /**
-     * @throws Exception
-     */
+
     @Override
-    public void configure() throws Exception {
+    public void configure(){
 
         onException(Exception.class)
                 .handled(true)
@@ -25,7 +23,7 @@ public class DeviceRoutes extends RouteBuilder {
                 .setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_VALUE))
                 .setBody(simple("{\"error\": \"${exception.message}}\"}"))
                 .log(LoggingLevel.ERROR, "Error occurred: ${exception.stacktrace}");
-        /**
+        /*
          * Get device by id
          */
         from("direct:getDeviceById").id("getDeviceById")
@@ -39,7 +37,7 @@ public class DeviceRoutes extends RouteBuilder {
                 .choice()
                 .when(simple("${header.CamelHttpResponseCode} == 200"))
                 .to("direct:validate");
-        /**
+        /*
          * Get all devices
          */
         from("direct:getAllDevices")
@@ -48,12 +46,8 @@ public class DeviceRoutes extends RouteBuilder {
                 .setBody(simple(""))
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
                 .toD("netty-http:${header.HouseAddress}/api/v0.1/house/device?throwExceptionOnFailure=false")
-                .unmarshal().json(JsonLibrary.Jackson)
-                .choice()
-                .when(simple("${header.CamelHttpResponseCode} == 200"))
-                .to("direct:validate");
-
-        /**
+                .unmarshal().json(JsonLibrary.Jackson);
+        /*
          * Get concrete device
          */
         from("direct:getConcreteDevice")
@@ -66,8 +60,7 @@ public class DeviceRoutes extends RouteBuilder {
                 .choice()
                 .when(simple("${header.CamelHttpResponseCode} == 200"))
                 .to("direct:validate");
-
-        /**
+        /*
          * Add device
          */
         from("direct:addDevice").disabled()
@@ -82,8 +75,7 @@ public class DeviceRoutes extends RouteBuilder {
                 .choice()
                 .when(simple("${header.CamelHttpResponseCode} == 200"))
                 .to("direct:validate");
-
-        /**
+        /*
          * Update device
          */
         from("direct:updateDevice")
@@ -94,7 +86,7 @@ public class DeviceRoutes extends RouteBuilder {
                 .to("bean:HouseService?method=getHouse(${header.house})")
                 .setProperty("HouseAddress", simple("${body.getAddress}"))
                 //check correct json format of device
-                .setBody(simple("${header.DeviceDTO}"))
+                .setBody(simple("${exchangeProperty.DeviceDTO}"))
                 .to("direct:validate")
                 //get device from house
                 .marshal().json()
@@ -109,16 +101,16 @@ public class DeviceRoutes extends RouteBuilder {
                     .setBody(simple("${exchangeProperty.DeviceDTO}"))
                     .marshal().json()
                     .toD("netty-http:${exchangeProperty.HouseAddress}/api/v0.1/house/device/${exchangeProperty.deviceType}/${exchangeProperty.DevID}?throwExceptionOnFailure=false")
-                    .unmarshal().json(JsonLibrary.Jackson)
                     .end()
+                .log(LoggingLevel.INFO, "Body ${body}")
                     .choice()
                 //if device was successfully updated
                 .when(simple("${header.CamelHttpResponseCode} == 200"))
+                    .unmarshal().json(JsonLibrary.Jackson)
                     .to("direct:validate")
                 .otherwise()
                     .unmarshal().json(JsonLibrary.Jackson);
-
-        /**
+        /*
          * Delete device
          */
         from("direct:deleteDevice")

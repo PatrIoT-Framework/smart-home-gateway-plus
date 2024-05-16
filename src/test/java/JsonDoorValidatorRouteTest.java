@@ -1,10 +1,13 @@
+import org.apache.camel.CamelExecutionException;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.jsonvalidator.JsonValidationException;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit5.CamelTestSupport;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class JsonDoorValidatorRouteTest extends CamelTestSupport {
     @Override
@@ -23,7 +26,7 @@ public class JsonDoorValidatorRouteTest extends CamelTestSupport {
 
     @Test
     public void testDoorSchemaOk() throws InterruptedException {
-        String json = "{\"deviceType\":\"door\",\"label\":\"device1\",\"status\":\"ON\",\"enabled\":true}";
+        String json = "{\"deviceType\":\"door\",\"label\":\"device1\",\"status\":\"opened\",\"enabled\":true}";
 
         result.expectedMessageCount(1);
 
@@ -33,37 +36,84 @@ public class JsonDoorValidatorRouteTest extends CamelTestSupport {
     }
 
     @Test
-    public void testDoorSchemaMissingName() throws InterruptedException {
-        String json = "{\"deviceType\":\"door\",\"status\":\"ON\"}";
+    public void testDoorSchemaMinimalOk() {
+        String json = "{\"deviceType\":\"door\",\"label\":\"device1\"}";
 
-        assertThrows(org.apache.camel.CamelExecutionException.class, () -> template.sendBody("direct:start", json));
+        template.sendBody("direct:start", json);
+
+        assertTrue(result.getExchanges().get(0).getIn().getBody().toString().contains("deviceType"));
     }
 
     @Test
-    public void testDoorSchemaMissingStatus() throws InterruptedException {
-        String json = "{\"deviceType\":\"door\",\"label\":\"device1\"}";
+    public void testDoorIncorrectStatus() {
+        String json = "{\"deviceType\":\"door\",\"label\":\"device1\",\"status\":\"ano\",\"enabled\":true}";
 
-        assertThrows(org.apache.camel.CamelExecutionException.class, () -> template.sendBody("direct:start", json));
+        CamelExecutionException thrown =  assertThrows(CamelExecutionException.class, () -> template.sendBody("direct:start", json));
+        assertTrue(thrown.getCause() instanceof JsonValidationException);
+    }
+
+    @Test
+    public void testDoorSchemaMissingName() throws InterruptedException {
+        String json = "{\"deviceType\":\"door\"}";
+
+        CamelExecutionException thrown =  assertThrows(CamelExecutionException.class, () -> template.sendBody("direct:start", json));
+        assertTrue(thrown.getCause() instanceof JsonValidationException);
     }
 
     @Test
     public void testDoorSchemaMissingDeviceType() throws InterruptedException {
-        String json = "{\"label\":\"device1\",\"status\":\"ON\"}";
+        String json = "{\"label\":\"device1\"}";
 
-        assertThrows(org.apache.camel.CamelExecutionException.class, () -> template.sendBody("direct:start", json));
+        CamelExecutionException thrown =  assertThrows(CamelExecutionException.class, () -> template.sendBody("direct:start", json));
+        assertTrue(thrown.getCause() instanceof JsonValidationException);
     }
+
+    @Test
+    public void testDoorSchemaWrongStatus() {
+        String json = "{\"deviceType\":\"door\",\"label\":\"device1\",\"status\":1,\"enabled\":true}";
+
+        CamelExecutionException thrown =  assertThrows(CamelExecutionException.class, () -> template.sendBody("direct:start", json));
+        assertTrue(thrown.getCause() instanceof JsonValidationException);
+    }
+
+    @Test
+    public void testDoorSchemaWrongEnabled() {
+        String json = "{\"deviceType\":\"door\",\"label\":\"device1\",\"status\":\"opened\",\"enabled\":\"true\"}";
+
+        CamelExecutionException thrown =  assertThrows(CamelExecutionException.class, () -> template.sendBody("direct:start", json));
+        assertTrue(thrown.getCause() instanceof JsonValidationException);
+    }
+
+    @Test
+    public void testDoorSchemaWrongDeviceType() {
+        String json = "{\"deviceType\":1,\"label\":\"device1\",\"status\":\"opened\",\"enabled\":true}";
+
+        CamelExecutionException thrown =  assertThrows(CamelExecutionException.class, () -> template.sendBody("direct:start", json));
+        assertTrue(thrown.getCause() instanceof JsonValidationException);
+    }
+
+    @Test
+    public void testDoorSchemaWrongLabel() {
+        String json = "{\"deviceType\":\"door\",\"label\":1,\"status\":\"opened\",\"enabled\":true}";
+
+        CamelExecutionException thrown =  assertThrows(CamelExecutionException.class, () -> template.sendBody("direct:start", json));
+        assertTrue(thrown.getCause() instanceof JsonValidationException);
+    }
+
 
     @Test
     public void testDoorSchemaMissingAll() throws InterruptedException {
         String json = "{}";
 
-        assertThrows(org.apache.camel.CamelExecutionException.class, () -> template.sendBody("direct:start", json));
+        CamelExecutionException thrown =  assertThrows(CamelExecutionException.class, () -> template.sendBody("direct:start", json));
+        assertTrue(thrown.getCause() instanceof JsonValidationException);
     }
 
     @Test
     public void testDoorSchemaExtraField() throws InterruptedException {
         String json = "{\"deviceType\":\"door\",\"label\":\"device1\",\"status\":\"ON\",\"extra\":\"extra\"}";
 
-        assertThrows(org.apache.camel.CamelExecutionException.class, () -> template.sendBody("direct:start", json));
+        CamelExecutionException thrown =  assertThrows(CamelExecutionException.class, () -> template.sendBody("direct:start", json));
+        assertTrue(thrown.getCause() instanceof JsonValidationException);
     }
 }

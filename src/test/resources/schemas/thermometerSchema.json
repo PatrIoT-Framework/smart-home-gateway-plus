@@ -6,6 +6,10 @@
       "properties": {
         "unit": {
           "default": "C",
+          "enum": [
+            "C",
+            "F"
+          ],
           "description": "The measuring unit of thermometer",
           "id": "/properties/unit",
           "title": "unit",
@@ -29,9 +33,11 @@
         "deviceType": {
           "default": "device",
           "description": "Type of the device",
+
           "id": "/properties/deviceType",
           "title": "The deviceType schema",
-          "type": "string"
+          "type": "string",
+          "const": "Thermometer"
         },
         "enabled": {
           "default":false,
@@ -43,9 +49,7 @@
       },
       "required": [
         "label",
-        "deviceType",
-        "enabled",
-        "unit"
+        "deviceType"
       ],
   "additionalProperties": false
 }
