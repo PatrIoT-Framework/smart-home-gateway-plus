@@ -17,7 +17,7 @@ public class DeviceConstants {
     /**
      * Device type for light
      */
-    public static final String RGB_DEVICE_TYPE = "RGBLight";
+    public static final String LIGHT_DEVICE_TYPE = "Light";
     /**
      * Device type for light
      */
