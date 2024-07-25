@@ -1,0 +1,17 @@
+camel:
+  springboot:
+    name: RestDSLContext
+  servlet:
+    mapping:
+      context-path: /*
+  rest:
+    context-path: /
+
+server:
+  port: 8080
+  address: 0.0.0.0
+
+whitelist:
+  turnOn: false
+  allowedHosts:
+    "localhost:8080"

@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {},
+  "id": "house-schema",
+  "properties": {
+    "name": {
+      "default": "house",
+      "description": "the name of the house",
+      "id": "/properties/name",
+      "title": "The id schema",
+      "type": "string"
+    },
+    "address": {
+      "default": null,
+      "description": "The http address of the house",
+      "id": "/properties/address",
+      "title": "The address schema",
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "address"
+  ],
+  "type": "object"
+}
