@@ -24,12 +24,16 @@
       "title": "The enabled schema",
       "type": "boolean"
     },
-    "switchedOn": {
-      "default": false,
+    "status": {
+      "default": "Off",
       "description": "Indicates whether the device is currently switched on.",
-      "id": "/properties/switchedOn",
+      "id": "/properties/status",
       "title": "The switchedOn schema",
-      "type": "boolean"
+      "type": "string",
+        "enum": [
+            "On",
+            "Off"
+        ]
     },
     "red": {
       "default": 0,

@@ -25,10 +25,10 @@
       "type": "boolean"
     },
     "status": {
-      "default": "off",
+      "default": "Off",
       "enum": [
-        "off",
-        "on"
+        "Off",
+        "On"
       ],
       "description": "the status of the light (On,Off)",
       "id": "/properties/status",

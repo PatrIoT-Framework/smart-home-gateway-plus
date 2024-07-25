@@ -25,10 +25,10 @@
       "type": "boolean"
     },
     "status": {
-      "default": "closed",
+      "default": "Closed",
       "enum": [
-        "closed",
-        "opened"
+        "Closed",
+        "Opened"
       ],
       "description": "the status of the door (closed,opened)",
       "id": "/properties/status",

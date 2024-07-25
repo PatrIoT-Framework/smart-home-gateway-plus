@@ -25,10 +25,10 @@
       "type": "boolean"
     },
     "status": {
-      "default": "extinguished",
+      "default": "Extinguished",
       "enum": [
-        "on_fire",
-        "extinguished"
+        "On_fire",
+        "Extinguished"
       ],
       "description": "the status of the fireplace (on_fire,extinguished)",
       "id": "/properties/status",

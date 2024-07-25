@@ -27,7 +27,7 @@ public class JsonDoorValidatorRouteTest extends CamelTestSupport {
 
     @Test
     public void testDoorSchemaOk() throws InterruptedException {
-        String json = "{\"deviceType\":\"door\",\"label\":\"device1\",\"status\":\"opened\",\"enabled\":true}";
+        String json = "{\"deviceType\":\"door\",\"label\":\"device1\",\"status\":\"Opened\",\"enabled\":true}";
 
         result.expectedMessageCount(1);
 

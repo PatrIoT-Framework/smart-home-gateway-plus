@@ -28,7 +28,7 @@ public class JsonFireplaceValidatorRouteTest extends CamelTestSupport {
 
     @Test
     public void testDeviceSchemaOk() throws InterruptedException {
-        String json = "{\"deviceType\":\"fireplace\",\"label\":\"device1\",\"status\":\"on_fire\",\"enabled\":true}";
+        String json = "{\"deviceType\":\"fireplace\",\"label\":\"device1\",\"status\":\"On_fire\",\"enabled\":true}";
 
         result.expectedMessageCount(1);
 
